@@ -32,3 +32,7 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+test.txt 
+public/build
+pages/api/test.js
