@@ -12,8 +12,12 @@ export const CHAINS = {
         name: "Arbitrum",
         RPC: `https://arb1.arbitrum.io/rpc`,
     },
+    43113: {
+        name: "Fuji (testnet)",
+        RPC: `https://api.avax-test.network/ext/bc/C/rpc`,
+    },
     43114: {
         name: "Avalanche",
         RPC: `https://api.avax.network/ext/bc/C/rpc`,
-    }
+    },
 }
