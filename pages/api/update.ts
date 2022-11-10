@@ -55,9 +55,9 @@ export default async function handler(req, res) {
 		const pinata = pinataClient(process.env.IPFS_API_KEY, process.env.IPFS_API_SECRET);
 		const readableStreamForFile = fs.createReadStream(`${path}/test.png`);
 
-		const { IpfsHash } = await pinata.pinFileToIPFS(readableStreamForFile,  {
+		const { IpfsHash: pfpHash } = await pinata.pinFileToIPFS(readableStreamForFile, {
 			pinataMetadata: {
-				name: `test`,
+				name: `pfp-${contract}-${tokenId}`,
 			},
 			pinataOptions: {
 				cidVersion: 0
@@ -65,7 +65,7 @@ export default async function handler(req, res) {
 		});
 
 		//3. update the metadata: image, contract, id, chain, locked
-		cardMetadata.image = `ipfs://${IpfsHash}`;
+		cardMetadata.image = `ipfs://${pfpHash}`;
 		cardMetadata.attributes[3] = true; //pfp locked
 		cardMetadata.attributes[4] = chainId; //pfp chain id
 		cardMetadata.attributes[5] = contract; //pfp contract address
@@ -78,7 +78,7 @@ export default async function handler(req, res) {
 
 
 	
-		res.status(200).json({ owner, image: `${process.env.IPFS_GATEWAY}/${IpfsHash}` })
+		res.status(200).json({ owner, image: `${process.env.IPFS_GATEWAY}/${pfpHash}` })
 	} catch (err) {
 		res.status(400).json({ error: err })
 	}
