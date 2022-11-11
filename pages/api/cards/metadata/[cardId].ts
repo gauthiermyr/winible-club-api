@@ -1,42 +1,38 @@
-import * as uuid from 'uuid'
-import { createCanvas, loadImage } from 'canvas';
-import fs from 'fs';
-import pinataClient from '@pinata/sdk';
 import { NextApiRequest } from 'next';
 import rateLimit from '../../../../utils/rate-limit';
 import absoluteUrl from 'next-absolute-url'
+import { gql, request } from 'graphql-request';
+
+const QUERY = gql`
+    query Card(
+        $cardId: String!
+    ) {
+        card(id: $cardId) {
+            id
+            cellar {
+                id
+                capacity
+            }
+            level {
+                name
+                defaultPerks {
+                    name
+                }
+            }
+        }
+    }
+`
 
 
 const metadata = {
-    "name": "",
-    "description": "Winible Club Card - FOR TESTNET ONLY",
-    "image": "",
-    "attributes": [
-        {
-            "name": "Green#21.8",
-            "rarity": "original"
-        },
-        {
-            "name": "Albino#4",
-            "rarity": "original"
-        },
-        {
-            "name": "Glasses#6",
-            "rarity": "original"
-        },
-        {
-            "name": "Goatee#10",
-            "rarity": "original"
-        },
-        {
-            "name": "TinfoilHat#1",
-            "rarity": "original"
-        },
-        {
-            "name": "Guitar#1",
-            "rarity": "original"
-        }
-    ]
+    name: "",
+    description: "Winible Club Card - FOR TESTNET ONLY",
+    image: "",
+    cellar : {
+        address: '',
+        capacity: 0
+    },
+    attributes: []
 }
 
 const limiter = rateLimit({
@@ -51,12 +47,32 @@ export default async function handler(req: NextApiRequest, res) {
 	try {
 		await limiter.check(res, 10, 'CACHE_TOKEN') // 10 requests per minute
 		
-        metadata.name = `Winible Flex (Alpha) - #${cardId}`;
         metadata.image = `${origin}/images/alpha_card_tamplate.png`
+
+        const { card } = await request(process.env.SUBGRAPH, QUERY, { cardId });
+
+        if(!card) throw new Error(`Card #${cardId} does not exist.`);
+
+        //card level
+        metadata.name = `Winible ${card.level.name} (Alpha) - #${cardId}`;
+        
+        // default perks
+        card.level.defaultPerks.forEach((perk) => {
+            metadata.attributes.push({
+                trait_type: perk.name, 
+                value: "Active"
+            });
+        });
+
+        // extra @TODO
+
+        //cellar
+        metadata.cellar.address = card.cellar.id;
+        metadata.cellar.capacity = card.cellar.capacity;
 
 	
 		res.status(200).json(metadata)
 	} catch (err) {
-		res.status(400).json({ error: err })
+		res.status(400).json({ error: err.message })
 	}
 }
