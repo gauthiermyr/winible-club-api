@@ -8,7 +8,8 @@ const SwaggerUI = dynamic<{
 }>(import('swagger-ui-react'), { ssr: false });
 
 function ApiDoc({ spec }: InferGetStaticPropsType<typeof getStaticProps>) {
-    return <SwaggerUI spec={ spec } />;
+    return <></>;
+    // return <SwaggerUI spec={ spec } />;
 }
 
 export const getStaticProps: GetStaticProps = async () => {
