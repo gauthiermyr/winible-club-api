@@ -27,7 +27,23 @@ const limiter = rateLimit({
 	uniqueTokenPerInterval: 500, // Max 500 users per second
 });
 
-export default async function handler(req: NextApiRequest, res) {
+/**
+ * @swagger
+ * /users/cards/{address}:
+ *   get:
+ *     description: Returns the cards owned by an user
+ *     parameters:
+ *      - in: path
+ *        name: address
+ *        description: bleb
+ *        schema:
+ *          type: address
+ *        required: true
+ *     responses:
+ *       200:
+ *          description: hello world
+ */
+export default async function handler (req: NextApiRequest, res) {
 	let { address } = req.query;
     const { origin } = absoluteUrl(req);
 
