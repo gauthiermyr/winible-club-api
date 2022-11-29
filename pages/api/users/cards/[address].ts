@@ -57,7 +57,7 @@ export default async function handler (req: NextApiRequest, res) {
         const { cards } = await request(process.env.SUBGRAPH, QUERY, { owner: address });
 
         cards.forEach((card) => {
-            card.metadata = `${origin}/cards/metadata/${card.id}`;
+            card.metadata = `${origin}/cards/${card.id}/metadata`;
         });
 	
 		res.status(200).json({
