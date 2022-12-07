@@ -18,7 +18,7 @@ const QUERY = gql`
                 id
                 capacity
             }
-    }
+        }  
     }
 `;
 

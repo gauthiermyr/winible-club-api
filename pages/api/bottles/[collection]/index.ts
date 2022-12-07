@@ -13,6 +13,7 @@ query Collection(
         symbol
         maxSupply
         currentSupply
+        minPrice
     }
 }
 `;
@@ -56,6 +57,7 @@ export default async function (req: NextApiRequest, res) {
             name: collec.name,
             symbol: collec.symbol,
             maxSupply: parseInt(collec.maxSupply),
+            minPrice: parseInt(collec.minPrice),
             currentSupply: parseInt(collec.currentSupply),
             available: collec.maxSupply - collec.currentSupply,
         });

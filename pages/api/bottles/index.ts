@@ -11,6 +11,7 @@ query Collection {
         symbol
         maxSupply
         currentSupply
+        minPrice
     }
 }
 `;
