@@ -9,6 +9,7 @@ const QUERY = gql`
     ) {
         card (id: $cardId) {
             cellar {
+                id
                 capacity
                 aum
                 owned {
