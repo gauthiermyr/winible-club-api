@@ -1,0 +1,28 @@
+{
+    "primaries": {
+        "type": "Wine",
+        "color": "Red",
+        "origin": "France",
+        "area": "Bordeaux",
+        "appellation": "Pomerol",
+        "domain": "Château Winible",
+        "year": 2023,
+        "volume": 75,
+        "container": "bottle",
+        "alcohol": 13,
+        "grape_varieties": [
+            {
+                "grape": "Merlot",
+                "percentage": 80
+            },
+            {
+                "grape": "Cabernet Franc",
+                "percentage": 20
+            }
+        ],
+        "vineyard": "winible vineyard"
+    },
+    "secondary": {
+        
+    }
+}

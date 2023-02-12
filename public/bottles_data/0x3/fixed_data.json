@@ -1,0 +1,24 @@
+{
+    "primaries": {
+        "type": "Wine",
+        "color": "Red",
+        "origin": "France",
+        "area": "Bourgogne",
+        "appellation": "Marsannay",
+        "domain": "Château Winible",
+        "year": 2023,
+        "volume": 75,
+        "container": "bottle",
+        "alcohol": 13,
+        "grape_varieties": [
+            {
+                "grape": "Pinot noir",
+                "percentage": 100
+            }
+        ],
+        "vineyard": "winible vineyard"
+    },
+    "secondary": {
+        
+    }
+}

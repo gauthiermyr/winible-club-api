@@ -4,21 +4,15 @@ import absoluteUrl from 'next-absolute-url'
 import { gql, request } from 'graphql-request';
 
 const QUERY = gql`
-    query Card(
-        $cardId: String!
+    query Collection(
+        $address: String!
     ) {
-        card(id: $cardId) {
-            id
-            cellar {
-                id
-                capacity
-            }
-            level {
-                name
-                defaultPerks {
-                    name
-                }
-            }
+        collection(id: $address) {
+            name
+            symbol
+            maxSupply
+            currentSupply
+            minPrice
         }
     }
 `;
@@ -26,22 +20,11 @@ const QUERY = gql`
 
 const metadata = {
     name: "",
-    description: "Winible Club Card - FOR TESTNET ONLY",
+    description: "",
     image: "",
+    image3D: "",
     tokenId: 0,
-    level: "",
-    nickname: "Satoshi Nakamoto",
-    pfp : {
-        image: 'https://img.seadn.io/files/a5aedf3c9cd2d0d0bc2d8e42d9ef796f.png',
-        chain: 1,
-        contract: '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d',
-        id: 2405
-    },
-    cellar : {
-        address: "",
-        capacity: 0
-    },
-    attributes: []
+    attributes: {}
 }
 
 const limiter = rateLimit({
@@ -50,40 +33,35 @@ const limiter = rateLimit({
 });
 
 export default async function handler(req: NextApiRequest, res) {
-	const { cardId } = req.query;
+	const { collection: collectionAddress, bottle } = req.query;
     const { origin } = absoluteUrl(req);
 
 	try {
 		await limiter.check(res, 10, 'CACHE_TOKEN') // 10 requests per minute
 		
-        metadata.image = `${origin}/images/alpha_card_tamplate.png` //fetch from S3 
+        metadata.image = `${origin}/bottles_data/${(collectionAddress as string).toLowerCase()}/image.png` //fetch from S3 
+        metadata.image3D = `${origin}/bottles_data/${(collectionAddress as string).toLowerCase()}/image.gltf` //fetch from S3 
 
-        const { card } = await request(process.env.SUBGRAPH, QUERY, { cardId });
+        const { collection } = await request(process.env.SUBGRAPH, QUERY, { address: collectionAddress });
 
-        if (!card) throw new Error(`Card #${cardId} does not exist.`);
+        if (!collection) throw new Error(`#${collectionAddress} does not exist.`);
 
-        metadata.tokenId = parseInt(cardId as string);
+        metadata.tokenId = parseInt(bottle as string);
 
         //card level
-        metadata.name = `Winible ${card.level.name} (Alpha) - #${cardId}`;
-        metadata.level = card.level.name;
-        // default perks
-        card.level.defaultPerks.forEach((perk) => {
-            metadata.attributes.push({
-                trait_type: perk.name, 
-                value: "Active"
-            });
-        });
+        metadata.name = `${collection.name}`;       
+        metadata.description = `Tesnet collection`;
 
+        // default perks
+        const fixed = await import(`/public/bottles_data/${(collectionAddress as string).toLowerCase()}/fixed_data.json`);
+       metadata.attributes = fixed;
         // extra @TODO
 
-        //cellar
-        metadata.cellar.address = card.cellar.id;
-        metadata.cellar.capacity = card.cellar.capacity;
 
 	
 		res.status(200).json(metadata);
 	} catch (err) {
+        console.log(err)
 		res.status(400).json({ error: err.message });
 	}
 }

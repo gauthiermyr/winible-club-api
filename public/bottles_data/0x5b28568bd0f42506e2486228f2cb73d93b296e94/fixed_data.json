@@ -1,0 +1,18 @@
+{
+    "primaries": {
+        "type": "Whisky",
+        "color": "Amber",
+        "origin": "France",
+        "area": "Côte d’Azur",
+        "domain": "Winible Distillery",
+        "flavors": ["full-bodied", "rich", "light and sweet", "roasted cocoa beans", "notes of chocolate", "caramel", "vanilla"],
+        "year": 2023,
+        "volume": 50,
+        "container": "bottle",
+        "alcohol": 45,
+        "age": 5
+    },
+    "secondary": {
+        
+    }
+}

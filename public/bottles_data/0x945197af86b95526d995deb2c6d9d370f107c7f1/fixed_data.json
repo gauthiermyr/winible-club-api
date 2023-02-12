@@ -1,0 +1,24 @@
+{
+    "primaries": {
+        "type": "Champagne Brut",
+        "color": "white",
+        "origin": "France",
+        "area": "Champagne",
+        "appellation": "blanc de blanc",
+        "domain": "Château Winible",
+        "year": 2023,
+        "volume": 75,
+        "container": "bottle",
+        "alcohol": 12,
+        "grape_varieties": [
+            {
+                "grape": "Chardonnay",
+                "percentage": 100
+            }
+        ],
+        "vineyard": "winible vineyard"
+    },
+    "secondary": {
+        
+    }
+}

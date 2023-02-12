@@ -36,3 +36,4 @@ yarn-error.log*
 test.txt 
 public/build
 pages/api/test.js
+yarn.lock
